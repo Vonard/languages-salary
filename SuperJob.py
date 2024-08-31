@@ -20,6 +20,7 @@ def get_superjob_vacancies(langs, token):
                 "X-Api-App-Id": token
             }
             response = requests.get(url, params=payload, headers=headers)
+            response.raise_for_status()
             json_response = response.json()
             vacancies = json_response["objects"]
             for vacancie in vacancies:
