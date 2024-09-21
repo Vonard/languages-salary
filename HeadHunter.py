@@ -16,17 +16,17 @@ def get_headhunter_vacancies(langs):
                        "per_page": 100}
             response = requests.get(url, params=payload)
             response.raise_for_status()
-            json_response = response.json()
-            if page >= json_response["pages"] - 1:
+            vacancies_response = response.json()
+            if page >= vacancies_response["pages"] - 1:
                 break
-            for vacancy in json_response["items"]:
+            for vacancy in vacancies_response["items"]:
                 if vacancy["salary"] and vacancy["salary"]["currency"] == "RUR":
                     salaries.append(predict_rub_salary(vacancy["salary"]["from"], vacancy["salary"]["to"]))
         try:
             average_salary = int(sum(salaries) / len(salaries))
         except ZeroDivisionError:
             average_salary = 0
-        vacancies[lang] = {"vacancies_found": json_response["found"],
+        vacancies[lang] = {"vacancies_found": vacancies_response["found"],
                             "vacancies_processed": len(salaries),
                             "average_salary": average_salary}
     return vacancies

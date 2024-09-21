@@ -21,18 +21,18 @@ def get_superjob_vacancies(langs, token):
             }
             response = requests.get(url, params=payload, headers=headers)
             response.raise_for_status()
-            json_response = response.json()
-            vacancies = json_response["objects"]
+            vacancies_response = response.json()
+            vacancies = vacancies_response["objects"]
             for vacancy in vacancies:
                 if (vacancy["payment_from"] or vacancy["payment_to"]) and vacancy["currency"] == "rub":
                     salaries_sj.append(predict_rub_salary(vacancy["payment_from"], vacancy["payment_to"]))
-            if not json_response["more"]:
+            if not vacancies_response["more"]:
                 break
         try:
             average_salary = int(sum(salaries_sj) / len(salaries_sj))
         except ZeroDivisionError:
             average_salary = 0
-        vacancies_sj[lang] = {"vacancies_found": json_response["total"],
+        vacancies_sj[lang] = {"vacancies_found": vacancies_response["total"],
                               "vacancies_processed": len(salaries_sj),
                               "average_salary": average_salary}
     return vacancies_sj
