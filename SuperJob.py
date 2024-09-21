@@ -23,9 +23,9 @@ def get_superjob_vacancies(langs, token):
             response.raise_for_status()
             json_response = response.json()
             vacancies = json_response["objects"]
-            for vacancie in vacancies:
-                if (vacancie["payment_from"] or vacancie["payment_to"]) and vacancie["currency"] == "rub":
-                    salaries_sj.append(predict_rub_salary(vacancie["payment_from"], vacancie["payment_to"]))
+            for vacancy in vacancies:
+                if (vacancy["payment_from"] or vacancy["payment_to"]) and vacancy["currency"] == "rub":
+                    salaries_sj.append(predict_rub_salary(vacancy["payment_from"], vacancy["payment_to"]))
             if not json_response["more"]:
                 break
         try:
